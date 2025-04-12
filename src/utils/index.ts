@@ -25,3 +25,7 @@ export const isEmpty = (value: unknown): boolean => {
 
   return false;
 };
+
+export const createKey = (key: string) => {
+  return `$$USE_FEATURE_FLAG_${key}$$`;
+};

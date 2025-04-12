@@ -11,5 +11,9 @@ export type FeatureFlagProviderProps = {
   useDebugMode?: boolean;
 };
 
+export type DebugConsoleContextValue = {
+  open: boolean;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyType = any;

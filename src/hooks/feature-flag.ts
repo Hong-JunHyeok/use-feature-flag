@@ -1,9 +1,8 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import {
   _FeatureFlagContextSetter,
   _FeatureFlagContextValue,
 } from "../contexts";
-import { useToggleState } from "./common";
 
 export const useAllFeatureFlag = () => {
   const value = useContext(_FeatureFlagContextValue);
@@ -19,7 +18,6 @@ export const useAllFeatureFlag = () => {
 
 export const useFeatureFlag = (key: string): boolean => {
   const flags = useAllFeatureFlag();
-
   const findFlag = flags.find((flag) => flag?.key === key);
 
   return findFlag?.active ?? false;
@@ -44,13 +42,13 @@ export const useSetFeatureFlag = () => {
 };
 
 export const useSetAllFeatureFlag = () => {
-  const [state, toggle] = useToggleState(false);
+  const [state, setState] = useState(false);
   const allFeatureFlag = useAllFeatureFlag();
   const setFeatureFlag = useSetFeatureFlag();
 
   const setAllFeatureFlag = () => {
     allFeatureFlag.forEach((flag) => setFeatureFlag(flag.key, state));
-    toggle();
+    setState((prev) => !prev);
   };
 
   return setAllFeatureFlag;
