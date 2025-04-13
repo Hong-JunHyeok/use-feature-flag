@@ -1,9 +1,8 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import type { FeatureFlagProviderProps, FlagValue } from "../types";
 import DebugConsole from "../components/DebugConsole";
-import { useLocalStorage, usePreventNestedContext } from "../hooks/common";
+import { usePreventNestedContext } from "../hooks/common";
 import { DebugConsoleProvider } from "./DebugConsoleContext";
-import { STORAGE_KEYS } from "../constants";
 
 export const _FeatureFlagContextValue = createContext<FlagValue[]>([]);
 export const _FeatureFlagContextSetter = createContext<
@@ -18,10 +17,7 @@ export const FeatureFlagProvider = ({
   children,
   useDebugMode = true,
 }: FeatureFlagProviderProps) => {
-  const [state, setter] = useLocalStorage<FlagValue[]>(
-    STORAGE_KEYS.PROVIDER,
-    values
-  );
+  const [state, setter] = useState<FlagValue[]>(values);
 
   usePreventNestedContext(_FeatureFlagContextValue);
   usePreventNestedContext(_FeatureFlagContextSetter);

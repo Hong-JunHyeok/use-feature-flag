@@ -31,7 +31,7 @@ function Flagging({ flagKey, newComponent, oldComponent }: FlaggingProps) {
 
   const content = showFeatureFlag ? newComponent : oldComponent;
 
-  if (showBorder) {
+  if (showFeatureFlag && showBorder) {
     return (
       <div className="relative z-50">
         <div className="absolute -top-6 left-1/2 w-fit -translate-x-1/2 transform rounded-lg bg-red-600/70 px-1 py-1 text-white shadow-lg text-[8px]">

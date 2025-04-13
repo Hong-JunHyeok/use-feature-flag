@@ -12,6 +12,7 @@ const DebugConsole = () => {
       open: false,
     }
   );
+
   const toggleConsole = () => {
     setValue((prev) => ({ ...prev, open: !prev.open }));
   };
