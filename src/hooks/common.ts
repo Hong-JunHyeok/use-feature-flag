@@ -1,17 +1,27 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { AnyType } from "../types";
 import { isEmpty } from "../utils";
 
 export const usePreventNestedContext = (context: React.Context<AnyType>) => {
-  const existContext = useContext(context);
+  const contextValue = useContext(context);
 
-  useEffect(() => {
-    if (!isEmpty(existContext)) {
-      throw new Error(
-        `FeatureFlagProvider is already mounted. Nested providers are not allowed.`
-      );
-    }
-  }, [existContext]);
+  if (!isEmpty(contextValue)) {
+    throw new Error(
+      `${context.displayName} is already mounted. Nested providers are not allowed.`
+    );
+  }
+};
+
+export const useTypeSafeContext = <T = unknown>(context: React.Context<T>) => {
+  const contextValue = useContext(context);
+
+  if (contextValue === undefined) {
+    throw new Error(
+      `Context not found. Make sure your component is wrapped in ${context.displayName}.`
+    );
+  }
+
+  return contextValue;
 };
 
 export const useLocalStorage = <T = unknown>(key: string, initialValue?: T) => {

@@ -1,20 +1,12 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import {
   _FeatureFlagContextSetter,
   _FeatureFlagContextValue,
 } from "../contexts";
+import { useTypeSafeContext } from "./common";
 
-export const useAllFeatureFlag = () => {
-  const value = useContext(_FeatureFlagContextValue);
-
-  if (!value) {
-    throw new Error(
-      "useAllFeatureFlag must be used within a FeatureFlagProvider. Make sure your component is wrapped in <FeatureFlagProvider>."
-    );
-  }
-
-  return value;
-};
+export const useAllFeatureFlag = () =>
+  useTypeSafeContext(_FeatureFlagContextValue);
 
 export const useFeatureFlag = (key: string): boolean => {
   const flags = useAllFeatureFlag();
@@ -24,13 +16,7 @@ export const useFeatureFlag = (key: string): boolean => {
 };
 
 export const useSetFeatureFlag = () => {
-  const setter = useContext(_FeatureFlagContextSetter);
-
-  if (!setter) {
-    throw new Error(
-      "useSetFeatureFlag must be used within a FeatureFlagProvider. Make sure your component is wrapped in <FeatureFlagProvider>."
-    );
-  }
+  const setter = useTypeSafeContext(_FeatureFlagContextSetter);
 
   const setFeatureFlag = (key: string, active: boolean) => {
     setter((prev) =>
@@ -42,12 +28,11 @@ export const useSetFeatureFlag = () => {
 };
 
 export const useSetAllFeatureFlag = () => {
+  const setter = useTypeSafeContext(_FeatureFlagContextSetter);
   const [state, setState] = useState(false);
-  const allFeatureFlag = useAllFeatureFlag();
-  const setFeatureFlag = useSetFeatureFlag();
 
   const setAllFeatureFlag = () => {
-    allFeatureFlag.forEach((flag) => setFeatureFlag(flag.key, state));
+    setter((prev) => prev.map((flag) => ({ ...flag, active: state })));
     setState((prev) => !prev);
   };
 
